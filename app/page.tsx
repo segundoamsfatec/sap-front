@@ -1,65 +1,146 @@
-import Image from "next/image";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
+import { Truck, Container, Ship, Users, ArrowUpRight, ArrowDownRight } from "lucide-react"
 
-export default function Home() {
+const stats = [
+  {
+    title: "Navios em Porto",
+    value: "14",
+    description: "+2 desde ontem",
+    icon: Ship,
+    trend: "up",
+  },
+  {
+    title: "Containers Processados",
+    value: "1,284",
+    description: "+12% esta semana",
+    icon: Container,
+    trend: "up",
+  },
+  {
+    title: "Frota Ativa",
+    value: "42",
+    description: "3 em manutenção",
+    icon: Truck,
+    trend: "down",
+  },
+  {
+    title: "Pessoal em Turno",
+    value: "156",
+    description: "Turno A (Manhã)",
+    icon: Users,
+    trend: "neutral",
+  },
+]
+
+const recentActivity = [
+  { id: "OP-4921", type: "Descarga", container: "MSC-7721", status: "Concluído", time: "10m atrás" },
+  { id: "OP-4922", type: "Carga", container: "HAP-1102", status: "Em progresso", time: "15m atrás" },
+  { id: "OP-4923", type: "Inspeção", container: "MAERSK-992", status: "Aguardando", time: "22m atrás" },
+  { id: "OP-4924", type: "Descarga", container: "ZIM-4482", status: "Concluído", time: "45m atrás" },
+  { id: "OP-4925", type: "Carga", container: "COSCO-123", status: "Cancelado", time: "1h atrás" },
+]
+
+export default function Dashboard() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <div className="flex flex-col gap-8">
+      <div>
+        <h1 className="text-3xl font-semibold tracking-tight">Dashboard</h1>
+        <p className="text-muted-foreground">Visão geral das operações portuárias em tempo real.</p>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {stats.map((stat) => (
+          <Card key={stat.title} className="border-none shadow-sm bg-zinc-50/50 dark:bg-zinc-900/50">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
+              <stat.icon className="size-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stat.value}</div>
+              <div className="flex items-center gap-1 mt-1">
+                {stat.trend === "up" && <ArrowUpRight className="size-3 text-emerald-500" />}
+                {stat.trend === "down" && <ArrowDownRight className="size-3 text-red-500" />}
+                <p className="text-xs text-muted-foreground">{stat.description}</p>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+        <Card className="lg:col-span-4 border-none shadow-sm">
+          <CardHeader>
+            <CardTitle>Atividade Recente</CardTitle>
+            <CardDescription>Operações de containers nas últimas 24 horas.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Operação</TableHead>
+                  <TableHead>Tipo</TableHead>
+                  <TableHead>Container</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Tempo</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {recentActivity.map((activity) => (
+                  <TableRow key={activity.id}>
+                    <TableCell className="font-medium">{activity.id}</TableCell>
+                    <TableCell>{activity.type}</TableCell>
+                    <TableCell>{activity.container}</TableCell>
+                    <TableCell>
+                      <Badge 
+                        variant={
+                          activity.status === "Concluído" ? "default" : 
+                          activity.status === "Em progresso" ? "secondary" : 
+                          activity.status === "Cancelado" ? "destructive" : "outline"
+                        }
+                        className="font-normal"
+                      >
+                        {activity.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-right text-muted-foreground">{activity.time}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+        <Card className="lg:col-span-3 border-none shadow-sm">
+          <CardHeader>
+            <CardTitle>Ocupação do Pátio</CardTitle>
+            <CardDescription>Distribuição de carga por setor.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {[
+                { label: "Setor Norte (Alpha)", value: 85 },
+                { label: "Setor Sul (Beta)", value: 42 },
+                { label: "Armazém Central", value: 68 },
+                { label: "Área de Refrigeração", value: 15 },
+              ].map((item) => (
+                <div key={item.label} className="space-y-2">
+                  <div className="flex items-center justify-between text-sm">
+                    <span>{item.label}</span>
+                    <span className="font-medium">{item.value}%</span>
+                  </div>
+                  <div className="h-1.5 w-full rounded-full bg-zinc-100 dark:bg-zinc-800">
+                    <div 
+                      className="h-full rounded-full bg-zinc-900 dark:bg-zinc-50" 
+                      style={{ width: `${item.value}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
-  );
+  )
 }
